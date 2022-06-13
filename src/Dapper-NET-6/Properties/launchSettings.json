@@ -4,17 +4,17 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:14552",
-      "sslPort": 44355
+      "applicationUrl": "http://localhost:10210",
+      "sslPort": 44314
     }
   },
   "profiles": {
-    "Dapper_NET_6": {
+    "DapperAndEFCore": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7046;http://localhost:5239",
+      "applicationUrl": "https://localhost:7042;http://localhost:5042",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
@@ -29,5 +29,3 @@
     }
   }
 }
-
-
