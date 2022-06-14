@@ -36,23 +36,45 @@ public class PostController : ControllerBase
         return Ok(entity);
     }
 
-    [HttpGet("{text}")]
-    public async Task<IActionResult> SearchPost(string text)
+    [HttpGet("{id:int}/Detail")]
+    public async Task<IActionResult> GetByIdWithDetail(int id)
     {
-        var entities = await _postRepository.SearchPost(text);
-
-        return Ok(entities);
-    }
-
-    [HttpGet("{id:int}/WithMoreComments")]
-    public async Task<IActionResult> GetPostWithMoreComments(int id)
-    {
-        var entity = await _postRepository.GetByIdAsync(id);
+        var entity = await _postRepository.GetRelationOneToOneAsync(id);
 
         if (entity is null)
             return NotFound($"Entity with Id = {id} not found.");
 
         return Ok(entity);
+    }
+
+    [HttpGet("{id:int}/Comments")]
+    public async Task<IActionResult> GetByIdWithComments(int id)
+    {
+        var entity = await _postRepository.GetRelationOneToManyAsync(id);
+
+        if (entity is null)
+            return NotFound($"Entity with Id = {id} not found.");
+
+        return Ok(entity);
+    }
+
+    [HttpGet("{id:int}/CommentsAndDetail")]
+    public async Task<IActionResult> GetByIdMultiMappingAsync(int id)
+    {
+        var entity = await _postRepository.GetMultiMappingAsync(id);
+
+        if (entity is null)
+            return NotFound($"Entity with Id = {id} not found.");
+
+        return Ok(entity);
+    }
+
+    [HttpGet("{text}/Search")]
+    public async Task<IActionResult> SearchPostByText(string text)
+    {
+        var entities = await _postRepository.SearchPostByText(text);
+
+        return Ok(entities);
     }
 
     [HttpPost]
@@ -68,6 +90,12 @@ public class PostController : ControllerBase
             return BadRequest("Your changes have no[t been saved.");
 
         return CreatedAtAction(nameof(Get), new { id = entity.Id }, entity);
+    }
+
+    [HttpPost("Transaction")]
+    public async Task AddPostWithCommentsTransaction()
+    {
+        await _postRepository.SampleTransaction();
     }
 
     [HttpPut("{id:int}")]

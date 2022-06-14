@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dapper_NET_6.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220613182025_Initial")]
+    [Migration("20220614192754_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,20 +38,8 @@ namespace Dapper_NET_6.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -83,18 +71,6 @@ namespace Dapper_NET_6.Migrations
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)");
 
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -110,6 +86,31 @@ namespace Dapper_NET_6.Migrations
                     b.ToTable("Posts");
                 });
 
+            modelBuilder.Entity("DapperAndEFCore.Entities.PostDetail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId")
+                        .IsUnique();
+
+                    b.ToTable("Details");
+                });
+
             modelBuilder.Entity("DapperAndEFCore.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -119,20 +120,8 @@ namespace Dapper_NET_6.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("Created")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -165,6 +154,17 @@ namespace Dapper_NET_6.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DapperAndEFCore.Entities.PostDetail", b =>
+                {
+                    b.HasOne("DapperAndEFCore.Entities.Post", "Post")
+                        .WithOne("Detail")
+                        .HasForeignKey("DapperAndEFCore.Entities.PostDetail", "PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("DapperAndEFCore.Entities.User", b =>
@@ -209,6 +209,9 @@ namespace Dapper_NET_6.Migrations
             modelBuilder.Entity("DapperAndEFCore.Entities.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Detail")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DapperAndEFCore.Entities.User", b =>
