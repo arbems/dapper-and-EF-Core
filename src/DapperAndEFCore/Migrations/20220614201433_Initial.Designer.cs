@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Dapper_NET_6.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20220614192754_Initial")]
+    [Migration("20220614201433_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -88,11 +88,8 @@ namespace Dapper_NET_6.Migrations
 
             modelBuilder.Entity("DapperAndEFCore.Entities.PostDetail", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
@@ -100,15 +97,9 @@ namespace Dapper_NET_6.Migrations
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
+                    b.HasKey("PostId");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostId")
-                        .IsUnique();
-
-                    b.ToTable("Details");
+                    b.ToTable("PostDetails");
                 });
 
             modelBuilder.Entity("DapperAndEFCore.Entities.User", b =>
@@ -202,8 +193,7 @@ namespace Dapper_NET_6.Migrations
                                 .HasForeignKey("UserId");
                         });
 
-                    b.Navigation("Address")
-                        .IsRequired();
+                    b.Navigation("Address");
                 });
 
             modelBuilder.Entity("DapperAndEFCore.Entities.Post", b =>

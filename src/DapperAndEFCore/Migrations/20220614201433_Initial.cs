@@ -18,11 +18,11 @@ namespace Dapper_NET_6.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Username = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Address_Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_State = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address_ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -73,20 +73,18 @@ namespace Dapper_NET_6.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Details",
+                name: "PostDetails",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
                     PostId = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: true),
                     LastModified = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Details", x => x.Id);
+                    table.PrimaryKey("PK_PostDetails", x => x.PostId);
                     table.ForeignKey(
-                        name: "FK_Details_Posts_PostId",
+                        name: "FK_PostDetails_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
                         principalColumn: "Id",
@@ -97,12 +95,6 @@ namespace Dapper_NET_6.Migrations
                 name: "IX_Comments_PostId",
                 table: "Comments",
                 column: "PostId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Details_PostId",
-                table: "Details",
-                column: "PostId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_UserId",
@@ -116,7 +108,7 @@ namespace Dapper_NET_6.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "Details");
+                name: "PostDetails");
 
             migrationBuilder.DropTable(
                 name: "Posts");
