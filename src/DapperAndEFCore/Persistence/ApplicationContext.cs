@@ -13,6 +13,8 @@ public class ApplicationContext : DbContext, IApplicationContext
     public DbSet<Comment> Comments => Set<Comment>();
     public DbSet<PostDetail> PostDetails => Set<PostDetail>();
 
+    // Representa una conexión abierta a un origen de datos y
+    // lo implementan proveedores de datos .NET que acceden a bases de datos relacionales.
     public IDbConnection Connection => Database.GetDbConnection();
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options) { }
@@ -26,15 +28,15 @@ public class ApplicationContext : DbContext, IApplicationContext
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
     {
-        var result = await base.SaveChangesAsync(cancellationToken);
-
-        return result;
+        return await base.SaveChangesAsync(cancellationToken);
     }
 }
 
 
 
-/* SAMPLE DATA */
+/* 
+ * Sample Data 
+ */
 public static class ApplicationContextSeed
 {
     public static async Task SeedSampleDataAsync(ApplicationContext context)
